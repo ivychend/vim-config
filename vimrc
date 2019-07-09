@@ -10,6 +10,16 @@ set nocompatible        " 不兼容vi
 filetype plugin on                  " 根据文件类型加载插件
 autocmd FileType help,* wincmd L    " 执行:help时，右侧另开窗口,默认上方
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-plug 配置 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugins will be downloaded under the specified directory.
+call plug#begin('./plugged')
+
+Plug 'Lokaltog/vim-easymotion'
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " matchit 配置 
