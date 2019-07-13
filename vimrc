@@ -9,6 +9,8 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
 Plug 'tomasr/molokai'
+Plug 'morhetz/gruvbox'
+Plug 'scrooloose/nerdtree'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -17,7 +19,8 @@ call plug#end()
 " 通用配置 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:mapleader = "\<Space>"        " leader默认为\, 可以修改为, 现为空格
-colorscheme molokai                 " molokai 主题, 前提主题路径已添加到rtp
+colorscheme gruvbox                 " 主题, 前提主题路径已添加到rtp
+set bg=dark                         " gruvbox dark/light mode
 
 " 通用按键映射
 nnoremap <silent> yaf [m{jV]m%y     " 复制整个函数，适用于Java, PHP等
@@ -84,4 +87,8 @@ let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.dirty=''
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" nerdtree 配置
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
