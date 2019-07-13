@@ -1,2 +1,4 @@
 # download by plug from github
 /plugged/vim-easymotion/
+
+*.swp
