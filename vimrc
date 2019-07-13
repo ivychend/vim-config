@@ -29,6 +29,7 @@ call plug#begin('$MY_VIM_PATH/plugged')
 " 通用插件 
 Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-airline/vim-airline'
+Plug 'tpope/vim-fugitive'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
