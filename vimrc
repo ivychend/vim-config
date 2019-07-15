@@ -11,6 +11,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdtree'
+Plug 'benjifisher/matchit.zip'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -41,19 +42,19 @@ set encoding=utf-8                              " utf-8编码
 filetype plugin indent on                       " 根据文件类型加载插件、缩进
 autocmd FileType help,* wincmd L                " 执行:help时，右侧另开窗口,默认上方
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " matchit 配置 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-runtime macros/matchit.vim              " 激活 matchit
-autocmd Filetype c 
-	\ let b:match_words = ''
+runtime macros/matchit.vim                      " 激活 matchit
+autocmd Filetype c                              " c 文件自定义跳转匹配
+            \ let b:match_words = ''
+            \ . ''
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " gtags 配置 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set cscopetag 			            " 使用 cscope 作为 tags 命令
-set cscopeprg='gtags-cscope' 	    " 使用 gtags-cscope 代替 cscope
+set cscopetag 			                        " 使用 cscope 作为 tags 命令
+set cscopeprg='gtags-cscope' 	                " 使用 gtags-cscope 代替 cscope
 
 let GtagsCscope_Auto_Load = 1
 let CtagsCscope_Auto_Map = 1
