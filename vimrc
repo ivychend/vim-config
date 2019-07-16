@@ -4,7 +4,7 @@
 " Plugins will be downloaded under the specified directory.
 call plug#begin('$MY_VIM_PATH/plugged')
 
-" 通用插件 
+" 通用插件, vim.org 上几乎所有插件都可以在 https://github.com/vim-scripts 找到
 Plug 'Lokaltog/vim-easymotion'
 Plug 'vim-airline/vim-airline'
 Plug 'tpope/vim-fugitive'
@@ -12,6 +12,10 @@ Plug 'tomasr/molokai'
 Plug 'morhetz/gruvbox'
 Plug 'scrooloose/nerdtree'
 Plug 'benjifisher/matchit.zip'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
+Plug 'vim-scripts/winmanager'
+Plug 'majutsushi/tagbar'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -70,6 +74,8 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#enabled = 1            " 顶部tab显示"
 let g:airline#extensions#tabline#show_tab_nr = 1
 let g:airline#extensions#tabline#tab_nr_type = 2
+let g:airline#extensions#tabline#fnamemod = ':t'        " tab只显示文件名
+
 
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
