@@ -118,15 +118,9 @@ let g:NERDTreeStatusline="nerdtree"             " nerdtree窗口statusline显示
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " nerdtree 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-autocmd vimenter * NERDTree                     " 自动开启Nerdtree
-autocmd vimenter * if !argc()|NERDTree|endif    " 打开vim时如果没有文件自动打开NERDTree
-"当NERDTree为剩下的唯一窗口时自动关闭
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
 let g:NERDTreeWinSize = 25                      " 设定 NERDTree 视窗大小
 let g:NERDTreeWinPos="right"                     " 窗口在左侧、右侧 right left
 let NERDTreeMinimalUI = 1                       " 不显示 press ? for help 那一行，使用u返回上一层目录
-"map <C-f> :NERDTreeToggle<CR>                  " 开启/关闭nerdtree快捷键
 "let NERDTreeShowBookmarks=1                    " 开启Nerdtree时自动显示Bookmarks
 let g:NERDTreeDirArrowExpandable = '▸'          " 设置树的显示图标
 let g:NERDTreeDirArrowCollapsible = '▾'
@@ -134,23 +128,35 @@ let NERDTreeDirArrows = 1                       " 显示目录图标
 let NERDTreeIgnore = ['\.pyc$']                 " 过滤所有.pyc文件不显示
 "let g:NERDTreeShowLineNumbers=1                " 是否显示行号
 "let g:NERDTreeHidden=0                         " 不显示隐藏文件
-""Making it prettier
+"let NERDTreeHighlightCursorline=0               " 不高亮显示光标所在的文件
+"map <C-f> :NERDTreeToggle<CR>                  " 开启/关闭nerdtree快捷键
 
-" 需要在nerdtree窗口打开后执行，否则无法跳转到打开文件窗口
-autocmd vimenter * wincmd w                     " 相当执行一次ctrl + w + w，跳转到下一个窗口
-set autochdir                                   " nerdtree自动切换到当前buffer文件所在目录
+autocmd vimenter * NERDTree                     " 自动开启Nerdtree
+autocmd vimenter * if !argc()|NERDTree|endif    " 打开vim时如果没有文件自动打开NERDTree
+"当NERDTree为剩下的唯一窗口时自动关闭
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " tagbar 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:Tagbar_title = "[Tagbar]"
-nmap <Leader>tb :TagbarToggle<CR>       " 快捷键设置 
-"map <F3> :Tagbar<CR>
 let g:tagbar_ctags_bin='ctags'          " 设置tagbar使用的ctags的插件,ctags在PATH路径上的，不需要路径 
-let g:tagbar_width=25                   " 窗口宽度的设置
-let g:tagbar_left=1                     " 设置tagbar的窗口显示的位置,为边
+"let g:tagbar_width=25                   " 窗口宽度的设置
+"let g:tagbar_left=1                     " 设置tagbar的窗口显示的位置,为边
 "let g:tagbar_right=1                    " 设置tagbar的窗口显示的位置,为右边
 "autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()  "如果是c语言的程序的话，tagbar自动开启,开了会导致nerdtree加载慢，autochdir无效
+let g:tagbar_vertical = 20                  " nerdtree tagbar同一侧，20开始分隔
+let g:tagbar_compact = 1                    " 去除第一行的帮助信息
+let g:tagbar_autoshowtag = 1                " 当编辑代码时，在Tagbar自动追踪变量
+let g:tagbar_iconchars = ['▸', '▾']         " 展开关闭文件夹的图标，设置图标后不会乱码
+
+" 打开vim时自动打开，默认不打开，默认打开会导致tagbar加载很慢，有时显示不出来，
+" 需要使用时再打开，使用ctrl + w + w切换到tagbar窗口再切换出来，tagbar可以立刻
+" 刷新
+autocmd VimEnter * nested :TagbarOpen       
+
+nmap <Leader>tb :TagbarToggle<CR>       " 快捷键设置 
+"map <F3> :Tagbar<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " winmanager 配置, 在 nerdtree、tagbar 后面，部分变量需要被 winmanager 使用到
@@ -164,7 +170,11 @@ let g:tagbar_left=1                     " 设置tagbar的窗口显示的位置,�
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 通用配置2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"set termencoding=cp936                         " 解决tagbar窗口边符号乱码，但是中文乱码，不能用
+" 需要在nerdtree窗口打开后执行，否则无法跳转到打开文件窗口
+autocmd vimenter * wincmd w                     " 相当执行一次ctrl + w + w，跳转到下一个窗口
+set autochdir                                   " nerdtree自动切换到当前buffer文件所在目录
+
+"set termencoding=cp936                         " 解决tagbar窗口边符号乱码，但是中文乱码，不能用，使用tagbar_iconchars后解决
 "language messages zh_CN.UTF-8 "解决输出乱码 
 source $VIMRUNTIME/delmenu.vim "解决菜单乱码
 source $VIMRUNTIME/menu.vim "解决consle输出乱码 
