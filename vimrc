@@ -54,6 +54,8 @@ set fillchars=vert:\                            " 窗口分隔默认为"|"，修
 "hi VertSplit ctermfg=244 ctermbg=232 cterm=bold
 highlight VertSplit term=reverse ctermbg=242 guibg=Grey40   " 灰色
 set autoread                                   " Automatically read a file changed outside of vim                        
+set incsearch                                   " 实时搜索，根据当前输入字符串实时匹配
+set hlsearch                                    " 高亮搜索结果，输入:nohlsearch(noh)取消，也可以:set nohlsearch
 
 
 
@@ -139,31 +141,32 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " tagbar 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:Tagbar_title = "[Tagbar]"
-let g:tagbar_ctags_bin='ctags'          " 设置tagbar使用的ctags的插件,ctags在PATH路径上的，不需要路径 
-"let g:tagbar_width=25                   " 窗口宽度的设置
-"let g:tagbar_left=1                     " 设置tagbar的窗口显示的位置,为边
-"let g:tagbar_right=1                    " 设置tagbar的窗口显示的位置,为右边
+let g:tagbar_ctags_bin='ctags'                  " 设置tagbar使用的ctags的插件,ctags在PATH路径上的，不需要路径 
+"let g:tagbar_width=25                          " 窗口宽度的设置
+"let g:tagbar_left=1                            " 设置tagbar的窗口显示的位置,为边
+"let g:tagbar_right=1                           " 设置tagbar的窗口显示的位置,为右边
 "autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()  "如果是c语言的程序的话，tagbar自动开启,开了会导致nerdtree加载慢，autochdir无效
-let g:tagbar_vertical = 20                  " nerdtree tagbar同一侧，20开始分隔
-let g:tagbar_compact = 1                    " 去除第一行的帮助信息
-let g:tagbar_autoshowtag = 1                " 当编辑代码时，在Tagbar自动追踪变量
-let g:tagbar_iconchars = ['▸', '▾']         " 展开关闭文件夹的图标，设置图标后不会乱码
+let g:tagbar_vertical = 20                      " nerdtree tagbar同一侧，20开始分隔
+let g:tagbar_compact = 1                        " 去除第一行的帮助信息
+let g:tagbar_autoshowtag = 1                    " 当编辑代码时，在Tagbar自动追踪变量
+let g:tagbar_iconchars = ['▸', '▾']             " 展开关闭文件夹的图标，设置图标后不会乱码
+set updatetime=2000                             " tagbar刷新时间间隔
 
 " 打开vim时自动打开，默认不打开，默认打开会导致tagbar加载很慢，有时显示不出来，
 " 需要使用时再打开，使用ctrl + w + w切换到tagbar窗口再切换出来，tagbar可以立刻
 " 刷新
-autocmd VimEnter * nested :TagbarOpen       
-
-nmap <Leader>tb :TagbarToggle<CR>       " 快捷键设置 
+autocmd VimEnter * nested :call tagbar#autoopen(1)  " 打开tagbar支持的文件类型时打开tagbar窗口
+"autocmd VimEnter * nested :TagbarOpen              " 只要打开vim就打开tagbar窗口
+nmap <Leader>tb :TagbarToggle<CR>               " 快捷键设置 
 "map <F3> :Tagbar<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " winmanager 配置, 在 nerdtree、tagbar 后面，部分变量需要被 winmanager 使用到
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"let g:winManagerWindowLayout='NERDTree'      "设置界面分割 Bufexplorer放到后面           
-"let g:winManagerWidth = 30                          "设置winmanager的宽度，默认为25     
-"let g:AutoOpenWinManager = 1                        "在进入vim时自动打开winmanager      
-"let g:persistentBehaviour = 0                       "所有文件关闭，只剩资源管理窗口时，退出vim
+"let g:winManagerWindowLayout='NERDTree'        " 设置界面分割 Bufexplorer放到后面           
+"let g:winManagerWidth = 30                     " 设置winmanager的宽度，默认为25     
+"let g:AutoOpenWinManager = 1                   " 在进入vim时自动打开winmanager      
+"let g:persistentBehaviour = 0                  " 所有文件关闭，只剩资源管理窗口时，退出vim
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -171,6 +174,7 @@ nmap <Leader>tb :TagbarToggle<CR>       " 快捷键设置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 需要在nerdtree窗口打开后执行，否则无法跳转到打开文件窗口
 autocmd vimenter * wincmd w                     " 相当执行一次ctrl + w + w，跳转到下一个窗口
+autocmd vimenter * wincmd w                     " 前面打开了nerdtree/tagbar，所以需要两次跳转到buffer
 set autochdir                                   " nerdtree自动切换到当前buffer文件所在目录
 " nerdtree tagbar窗口行、列不高亮
 autocmd FileType nerdtree setlocal nocursorcolumn
