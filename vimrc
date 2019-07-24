@@ -42,7 +42,9 @@ set autoindent                                  " 自动缩进，与set paste冲
 set expandtab	                                " 用空格来替换tab
 set nocompatible                                " 不兼容vi
 set t_Co=256                                    " 256色
-set encoding=utf-8                              " utf-8编码
+set encoding=utf-8                              " utf-8编码,缓冲的文本(你正在编辑的文件)，寄存器，Vim 脚本文件
+"set termencoding=utf-8                          " 输出到客户终端（Term）采用的编码类型，默认为空，就是不进行编码转换
+set fileencoding=utf-8                          " vim写入文件时采用的编码类型
 "set ruler                                       " 高亮当前行
 let autosave=60                                 " 60s自动保存
 set cursorcolumn                                " 高亮当前列
@@ -52,6 +54,8 @@ set fillchars=vert:\                            " 窗口分隔默认为"|"，修
 "highlight VertSplit ctermbg=100 ctermfg=100     " 设置窗口分隔符颜色
 "hi VertSplit ctermfg=244 ctermbg=232 cterm=bold
 highlight VertSplit term=reverse ctermbg=242 guibg=Grey40   " 灰色
+set autoread                                   " Automatically read a file changed outside of vim                        
+
 
 
 filetype plugin indent on                       " 根据文件类型加载插件、缩进
@@ -88,7 +92,6 @@ let g:airline#extensions#tabline#show_tab_nr = 1
 let g:airline#extensions#tabline#tab_nr_type = 2
 let g:airline#extensions#tabline#fnamemod = ':t'        " tab只显示文件名
 
-
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 let g:airline#extensions#tabline#right_sep = '⮂'
@@ -110,6 +113,8 @@ let g:airline_symbols.linenr = ''
 let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.dirty=''
 
+let g:NERDTreeStatusline="nerdtree"             " nerdtree窗口statusline显示为nerdtree
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " nerdtree 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -119,9 +124,8 @@ autocmd vimenter * if !argc()|NERDTree|endif    " 打开vim时如果没有文件
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 let g:NERDTreeWinSize = 25                      " 设定 NERDTree 视窗大小
-let g:NERDTreeWinPos="left"                     " 窗口在左侧、右侧 right left
-let NERDTreeMinimalUI = 1                       " 不显示 press ? for help 那一行
-set autochdir                                   " nerdtree自动切换到当前buffer文件所在目录
+let g:NERDTreeWinPos="right"                     " 窗口在左侧、右侧 right left
+let NERDTreeMinimalUI = 1                       " 不显示 press ? for help 那一行，使用u返回上一层目录
 "map <C-f> :NERDTreeToggle<CR>                  " 开启/关闭nerdtree快捷键
 "let NERDTreeShowBookmarks=1                    " 开启Nerdtree时自动显示Bookmarks
 let g:NERDTreeDirArrowExpandable = '▸'          " 设置树的显示图标
@@ -132,11 +136,21 @@ let NERDTreeIgnore = ['\.pyc$']                 " 过滤所有.pyc文件不显�
 "let g:NERDTreeHidden=0                         " 不显示隐藏文件
 ""Making it prettier
 
+" 需要在nerdtree窗口打开后执行，否则无法跳转到打开文件窗口
+autocmd vimenter * wincmd w                     " 相当执行一次ctrl + w + w，跳转到下一个窗口
+set autochdir                                   " nerdtree自动切换到当前buffer文件所在目录
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " tagbar 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:Tagbar_title = "[Tagbar]"
+nmap <Leader>tb :TagbarToggle<CR>       " 快捷键设置 
+"map <F3> :Tagbar<CR>
+let g:tagbar_ctags_bin='ctags'          " 设置tagbar使用的ctags的插件,ctags在PATH路径上的，不需要路径 
+let g:tagbar_width=25                   " 窗口宽度的设置
+let g:tagbar_left=1                     " 设置tagbar的窗口显示的位置,为边
+"let g:tagbar_right=1                    " 设置tagbar的窗口显示的位置,为右边
+"autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()  "如果是c语言的程序的话，tagbar自动开启,开了会导致nerdtree加载慢，autochdir无效
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " winmanager 配置, 在 nerdtree、tagbar 后面，部分变量需要被 winmanager 使用到
@@ -146,3 +160,11 @@ let g:Tagbar_title = "[Tagbar]"
 "let g:AutoOpenWinManager = 1                        "在进入vim时自动打开winmanager      
 "let g:persistentBehaviour = 0                       "所有文件关闭，只剩资源管理窗口时，退出vim
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 通用配置2
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"set termencoding=cp936                         " 解决tagbar窗口边符号乱码，但是中文乱码，不能用
+"language messages zh_CN.UTF-8 "解决输出乱码 
+source $VIMRUNTIME/delmenu.vim "解决菜单乱码
+source $VIMRUNTIME/menu.vim "解决consle输出乱码 
