@@ -47,8 +47,7 @@ set encoding=utf-8                              " utf-8编码,缓冲的文本(�
 set fileencoding=utf-8                          " vim写入文件时采用的编码类型
 "set ruler                                       " 高亮当前行
 let autosave=60                                 " 60s自动保存
-set cursorcolumn                                " 高亮当前列
-set cursorline                                  " 高亮当前行
+set cursorcolumn cursorline                     " 高亮当前列/行
 set noswapfile                                  " 不生成.swp文件
 set fillchars=vert:\                            " 窗口分隔默认为"|"，修改为空格，"\"后有空格 
 "highlight VertSplit ctermbg=100 ctermfg=100     " 设置窗口分隔符颜色
@@ -173,6 +172,10 @@ nmap <Leader>tb :TagbarToggle<CR>       " 快捷键设置
 " 需要在nerdtree窗口打开后执行，否则无法跳转到打开文件窗口
 autocmd vimenter * wincmd w                     " 相当执行一次ctrl + w + w，跳转到下一个窗口
 set autochdir                                   " nerdtree自动切换到当前buffer文件所在目录
+" nerdtree tagbar窗口行、列不高亮
+autocmd FileType nerdtree setlocal nocursorcolumn
+autocmd FileType tagbar setlocal nocursorline nocursorcolumn
+
 
 "set termencoding=cp936                         " 解决tagbar窗口边符号乱码，但是中文乱码，不能用，使用tagbar_iconchars后解决
 "language messages zh_CN.UTF-8 "解决输出乱码 
