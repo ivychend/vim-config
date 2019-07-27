@@ -25,38 +25,57 @@ call plug#end()
 " 通用配置 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:mapleader = "\<Space>"        " leader默认为\, 可以修改为, 现为空格
-colorscheme gruvbox                 " 主题, 前提主题路径已添加到rtp
-set bg=dark                         " gruvbox dark/light mode
 
 " 通用按键映射
 nnoremap <silent> yaf [m{jV]m%y     " 复制整个函数，适用于Java, PHP等
 
+
+set nocompatible                                " 不兼容vi
+set noswapfile                                  " 不生成.swp文件
+
+" 颜色、主题
+colorscheme gruvbox                             " 主题, 前提主题路径已添加到rtp
+set bg=dark                                     " gruvbox dark/light mode
+set t_Co=256                                    " 256色
+
+" 行号
 set relativenumber                              " 绝对行号    
 set number                                      " 相对行号    
 autocmd InsertEnter * :set norelativenumber     " 插入模式下撤下相对行号
 autocmd InsertLeave * :set relativenumber       " 普通模式下加上相对行号
+
+" 缩进、tab、换行、paste
 set tabstop=4	                                " 一个tab四个空格字符
 set softtabstop=4                               " 编辑模式的时按退格退回缩进的长度
-set shiftwidth=4                                " 每一级缩进的长度
-set autoindent                                  " 自动缩进，与set paste冲突，不能共存
 set expandtab	                                " 用空格来替换tab
-set nocompatible                                " 不兼容vi
-set t_Co=256                                    " 256色
+set shiftwidth=4                                " 每一级缩进的长度
+set textwidth=150                               " 设置150自动换行,150已经接近nerdtree窗口了
+set autoindent                                  " 自动缩进，与set paste冲突，不能共存
+"set paste                                       " vim粘贴外部内容时，autoindent会修改缩进，此时需要使用
+set smartindent                                 " 智能缩进
+
+" 编码
 set encoding=utf-8                              " utf-8编码,缓冲的文本(你正在编辑的文件)，寄存器，Vim 脚本文件
 "set termencoding=utf-8                          " 输出到客户终端（Term）采用的编码类型，默认为空，就是不进行编码转换
 set fileencoding=utf-8                          " vim写入文件时采用的编码类型
+
+" 光标、鼠标
 "set ruler                                       " 高亮当前行
-let autosave=60                                 " 60s自动保存
 set cursorcolumn cursorline                     " 高亮当前列/行
-set noswapfile                                  " 不生成.swp文件
+
+" 搜索
+set incsearch                                   " 实时搜索，根据当前输入字符串实时匹配
+set hlsearch                                    " 高亮搜索结果，输入:nohlsearch(noh)取消，也可以:set nohlsearch
+
+" UI
 set fillchars=vert:\                            " 窗口分隔默认为"|"，修改为空格，"\"后有空格 
 "highlight VertSplit ctermbg=100 ctermfg=100     " 设置窗口分隔符颜色
 "hi VertSplit ctermfg=244 ctermbg=232 cterm=bold
 highlight VertSplit term=reverse ctermbg=242 guibg=Grey40   " 灰色
-set autoread                                   " Automatically read a file changed outside of vim                        
-set incsearch                                   " 实时搜索，根据当前输入字符串实时匹配
-set hlsearch                                    " 高亮搜索结果，输入:nohlsearch(noh)取消，也可以:set nohlsearch
 
+" 自动化
+let autosave=60                                 " 60s自动保存
+set autoread                                    " Automatically read a file changed outside of vim                        
 
 
 filetype plugin indent on                       " 根据文件类型加载插件、缩进
@@ -73,6 +92,7 @@ autocmd Filetype c                              " c 文件自定义跳转匹配
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " gtags 配置 
+"Gutentags 提供了后台无缝更新 gtags 数据库的功能，而 gutentags_plus 提供了无缝切换 gtags 数据库的功能
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set cscopetag 			                        " 使用 cscope 作为 tags 命令
 set cscopeprg='gtags-cscope' 	                " 使用 gtags-cscope 代替 cscope
@@ -119,7 +139,7 @@ let g:NERDTreeStatusline="nerdtree"             " nerdtree窗口statusline显示
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " nerdtree 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:NERDTreeWinSize = 25                      " 设定 NERDTree 视窗大小
+let g:NERDTreeWinSize = 30                      " 设定 NERDTree 视窗大小
 let g:NERDTreeWinPos="right"                     " 窗口在左侧、右侧 right left
 let NERDTreeMinimalUI = 1                       " 不显示 press ? for help 那一行，使用u返回上一层目录
 "let NERDTreeShowBookmarks=1                    " 开启Nerdtree时自动显示Bookmarks
@@ -155,8 +175,8 @@ set updatetime=2000                             " tagbar刷新时间间隔
 " 打开vim时自动打开，默认不打开，默认打开会导致tagbar加载很慢，有时显示不出来，
 " 需要使用时再打开，使用ctrl + w + w切换到tagbar窗口再切换出来，tagbar可以立刻
 " 刷新
-autocmd VimEnter * nested :call tagbar#autoopen(1)  " 打开tagbar支持的文件类型时打开tagbar窗口
-"autocmd VimEnter * nested :TagbarOpen              " 只要打开vim就打开tagbar窗口
+"autocmd VimEnter * nested :call tagbar#autoopen(1)  " 打开tagbar支持的文件类型时打开tagbar窗口
+autocmd VimEnter * nested :TagbarOpen              " 只要打开vim就打开tagbar窗口
 nmap <Leader>tb :TagbarToggle<CR>               " 快捷键设置 
 "map <F3> :Tagbar<CR>
 
