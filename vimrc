@@ -124,8 +124,15 @@ autocmd Filetype c                              " c 文件自定义跳转匹配
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let $GTAGSLABEL = 'native-pygments'             " pygments支持gtags原生支持语言外的语言，修改为'native'禁用pygments
 
+" gutentags_add_default_project_roots设置为0，取消gutentags_project_root默认值
+let g:gutentags_add_default_project_roots = 0
+
 " gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
-let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'kernel', 'u\-boot']
+"let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'kernel', 'u\-boot']
+let g:gutentags_project_root = ['.root', '.svn', '.hg', '.project', 'kernel', 'u\-boot']
+
+" gutentags_exclude_project_root无效，后期测试
+let g:gutentags_exclude_project_root = ['*android*', '*linux*', '/home/rpdzkj_debug/first/ivy/nano-rk3399-lpddr4-android8.1/']
 
 " 所生成的数据文件的名称，不添加默认生成tags，必须要有tags文件无法使用ctrl + ]跳转
 let g:gutentags_ctags_tagfile = '.tags'
@@ -140,7 +147,7 @@ if executable('gtags-cscope') && executable('gtags')
 endif
 
 " 将自动生成的 ctags/gtags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
-"let g:gutentags_cache_dir = expand('$MY_VIM_PATH/.cache/tags')
+let g:gutentags_cache_dir = expand('$MY_VIM_PATH/.cache/tags')
 
 " 配置 ctags 的参数
 let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']

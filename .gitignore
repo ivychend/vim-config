@@ -2,3 +2,11 @@
 /plugged/vim-easymotion/
 
 *.swp
+
+# ignore tag file
+.tags
+tags
+GPATH
+GRTAGS
+GTAGS
+

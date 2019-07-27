@@ -35,3 +35,5 @@ make && make install                        # need sudo or root by default, caus
 # use vim-plug install ludovicchabant/vim-gutentags skywind3000/gutentags_plus so that we do not need to copy *.vim anymore
 #cp gtags-cscope.vim,gtags.vim $VIM_DIR/plugin/
 
+# install pygments, for gtags
+pip install pygments
