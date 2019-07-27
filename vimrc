@@ -68,6 +68,7 @@ set incsearch                                   " 实时搜索，根据当前输
 set hlsearch                                    " 高亮搜索结果，输入:nohlsearch(noh)取消，也可以:set nohlsearch
 
 " UI
+set laststatus=2                                "永远显示状态栏
 set fillchars=vert:\                            " 窗口分隔默认为"|"，修改为空格，"\"后有空格 
 "highlight VertSplit ctermbg=100 ctermfg=100     " 设置窗口分隔符颜色
 "hi VertSplit ctermfg=244 ctermbg=232 cterm=bold
@@ -92,20 +93,81 @@ autocmd Filetype c                              " c 文件自定义跳转匹配
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " gtags 配置 
-"Gutentags 提供了后台无缝更新 gtags 数据库的功能，而 gutentags_plus 提供了无缝切换 gtags 数据库的功能
+" vim-Gutentags 提供了后台无缝更新 gtags 数据库的功能，而 gutentags_plus 提供了无缝切换 gtags 数据库的功能
+" pip install pygments，用来支持其他语言
+"
+" 快捷键
+" <leader>cs    Find symbol (reference) under cursor
+" <leader>cg    Find symbol definition under cursor
+" <leader>cd    Functions called by this function
+" <leader>cc    Functions calling this function
+" <leader>ct    Find text string under cursor
+" <leader>ce    Find egrep pattern under cursor
+" <leader>cf    Find file name under cursor
+" <leader>ci    Find files #including the file name under cursor
+" <leader>ca    Find places where current symbol is assigned
+"
+" You can disable the default keymaps by:
+"
+" let g:gutentags_plus_nomap = 1
+" and define your new maps like:
+"
+" noremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
+" noremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
+" noremap <silent> <leader>gc :GscopeFind c <C-R><C-W><cr>
+" noremap <silent> <leader>gt :GscopeFind t <C-R><C-W><cr>
+" noremap <silent> <leader>ge :GscopeFind e <C-R><C-W><cr>
+" noremap <silent> <leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+" noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+" noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
+" noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set cscopetag 			                        " 使用 cscope 作为 tags 命令
-set cscopeprg='gtags-cscope' 	                " 使用 gtags-cscope 代替 cscope
+let $GTAGSLABEL = 'native-pygments'             " pygments支持gtags原生支持语言外的语言，修改为'native'禁用pygments
 
-let GtagsCscope_Auto_Load = 1
-let CtagsCscope_Auto_Map = 1
-let GtagsCscope_Quiet = 1
+" gutentags 搜索工程目录的标志，当前文件路径向上递归直到碰到这些文件/目录名
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project', 'kernel', 'u\-boot']
+
+" 所生成的数据文件的名称，不添加默认生成tags，必须要有tags文件无法使用ctrl + ]跳转
+let g:gutentags_ctags_tagfile = '.tags'
+
+" 同时开启 ctags 和 gtags 支持：
+let g:gutentags_modules = []
+if executable('ctags')
+	let g:gutentags_modules += ['ctags']
+endif
+if executable('gtags-cscope') && executable('gtags')
+	let g:gutentags_modules += ['gtags_cscope']
+endif
+
+" 将自动生成的 ctags/gtags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
+"let g:gutentags_cache_dir = expand('$MY_VIM_PATH/.cache/tags')
+
+" 配置 ctags 的参数
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+
+" 如果使用 universal ctags 需要增加下面一行，如果不是universal ctags不要添加，添加后报错：gutentags: ctags job failed, returned: 1
+"let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+
+" 禁用 gutentags 自动加载 gtags 数据库的行为
+let g:gutentags_auto_add_gtags_cscope = 0
+
+" 解决 gutentags: ctags job failed, returned: 1
+let g:gutentags_define_advanced_commands = 1
+" 需要查看更多的信息时将下面打开，打开的vim中执行messages，显示gtags的信息
+"let g:gutentags_trace = 1
+
+set cscopetag 			                                " 使用 cscope 作为 tags 命令
+set cscopeprg='gtags-cscope' 	                        " 使用 gtags-cscope 代替 cscope，如果不在PATH，需要完整路径
+"let GtagsCscope_Auto_Load = 1
+"let CtagsCscope_Auto_Map = 1
+"let GtagsCscope_Quiet = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-airline 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set langmenu=zh_CN.UTF-8
-set laststatus=2                                        "永远显示状态栏
 "let g:airline_theme="molokai" 
 let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#enabled = 1            " 顶部tab显示"
@@ -135,6 +197,7 @@ let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.dirty=''
 
 let g:NERDTreeStatusline="nerdtree"             " nerdtree窗口statusline显示为nerdtree
+let g:airline#extensions#gutentags#enabled = 1 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " nerdtree 配置
@@ -159,6 +222,8 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " tagbar 配置
+" 不再建议使用 tagbar, 它会在你保存文件的时候以同步等待的方式运行 ctags （即便你没有打开 tagbar），
+" 导致vim操作变卡，可以使用LeaderF来显示函数列表
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:Tagbar_title = "[Tagbar]"
 let g:tagbar_ctags_bin='ctags'                  " 设置tagbar使用的ctags的插件,ctags在PATH路径上的，不需要路径 
