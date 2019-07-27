@@ -17,6 +17,7 @@ Plug 'skywind3000/gutentags_plus'
 Plug 'vim-scripts/winmanager'
 Plug 'majutsushi/tagbar'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+Plug 'w0rp/ale'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -260,6 +261,56 @@ nmap <Leader>tb :TagbarToggle<CR>               " 快捷键设置
 "let g:AutoOpenWinManager = 1                   " 在进入vim时自动打开winmanager      
 "let g:persistentBehaviour = 0                  " 所有文件关闭，只剩资源管理窗口时，退出vim
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ale配置
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"let g:ale_sign_column_always = 1				"始终开启标志列
+"let g:ale_set_highlights = 0
+"let g:ale_sign_error = '✗'						"自定义error和warning图标
+"let g:ale_sign_warning = '⚡'
+"
+"let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']	"在vim自带的状态栏中整合ale	
+"let g:ale_echo_msg_error_str = 'E'						"显示Linter名称,出错或警告等相关信息
+"let g:ale_echo_msg_warning_str = 'W'
+"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+"
+"nmap sp <Plug>(ale_previous_wrap)				"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+"nmap sn <Plug>(ale_next_wrap)
+"nmap <Leader>s :ALEToggle<CR>					"显示Linter名称,出错或警告等相关信息
+"nmap <Leader>d :ALEDetail<CR>					"显示Linter名称,出错或警告等相关信息
+"
+""设置状态栏显示的内容
+""set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}\ %{ALEGetStatusLine()}
+"
+"let g:ale_lint_on_text_changed = 'never'		"文件内容发生变化时不进行检查，保存文件时才运行Linters
+"let g:ale_lint_on_enter = 0						"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
+"
+"使用clang对c和c++进行语法检查，对python使用pylint进行语法检查
+let g:ale_linters = {
+\   'c++': ['clang'],
+\   'c': ['clang', 'gcc'],
+\   'python': ['pylint'],
+\}
+let g:ale_linters_explicit = 1
+let g:ale_completion_delay = 500
+let g:ale_echo_delay = 20
+let g:ale_lint_delay = 500
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:airline#extensions#ale#enabled = 1
+
+let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
+let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+let g:ale_c_cppcheck_options = ''
+let g:ale_cpp_cppcheck_options = ''
+"let g:ale_sign_error = "\ue009\ue009"
+hi! clear SpellBad
+hi! clear SpellCap
+hi! clear SpellRare
+hi! SpellBad gui=undercurl guisp=red
+hi! SpellCap gui=undercurl guisp=blue
+hi! SpellRare gui=undercurl guisp=magenta
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 通用配置2
@@ -272,8 +323,11 @@ set autochdir                                   " nerdtree自动切换到当前b
 autocmd FileType nerdtree setlocal nocursorcolumn
 autocmd FileType tagbar setlocal nocursorline nocursorcolumn
 
-
 "set termencoding=cp936                         " 解决tagbar窗口边符号乱码，但是中文乱码，不能用，使用tagbar_iconchars后解决
 "language messages zh_CN.UTF-8 "解决输出乱码 
 source $VIMRUNTIME/delmenu.vim "解决菜单乱码
 source $VIMRUNTIME/menu.vim "解决consle输出乱码 
+
+set fileencodings=utf-8,gbk,utf-16le,cp1252,iso-8859-15,ucs-bom
+set termencoding=utf-8
+set encoding=utf-8
