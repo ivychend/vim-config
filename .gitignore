@@ -1,6 +1,7 @@
 # download by plug from github
-/plugged/vim-easymotion/
-
+/plugged/
+ex-download/
+ex-install/
 *.swp
 
 # ignore tag file
