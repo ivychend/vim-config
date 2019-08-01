@@ -19,6 +19,8 @@ Plug 'majutsushi/tagbar'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'w0rp/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-surround'
+Plug 'liuchengxu/vim-which-key'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -80,6 +82,8 @@ highlight VertSplit term=reverse ctermbg=242 guibg=Grey40   " 灰色
 let autosave=60                                 " 60s自动保存
 set autoread                                    " Automatically read a file changed outside of vim                        
 
+" 折叠
+set foldmethod=marker                           " 开启折叠，并保存折叠信息
 
 filetype plugin indent on                       " 根据文件类型加载插件、缩进
 " autocmd FileType help,* wincmd L 导致nerdtree tagbar等窗口无法调整大小
@@ -208,6 +212,18 @@ let g:airline_symbols.dirty=''
 let g:NERDTreeStatusline="nerdtree"             " nerdtree窗口statusline显示为nerdtree
 let g:airline#extensions#gutentags#enabled = 1 
 
+" 添加vim窗口序号，但是tagbar不生效
+function! WindowNumber(...)
+    let builder = a:1
+    let context = a:2
+    call builder.add_section('airline_b', '%{tabpagewinnr(tabpagenr())}')
+    return 0
+endfunction
+
+call airline#add_statusline_func('WindowNumber')
+call airline#add_inactive_statusline_func('WindowNumber')
+" added end
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " nerdtree 配置
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -220,7 +236,7 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 let NERDTreeDirArrows = 1                       " 显示目录图标
 let NERDTreeIgnore = ['\.pyc$']                 " 过滤所有.pyc文件不显示
 "let g:NERDTreeShowLineNumbers=1                " 是否显示行号
-"let g:NERDTreeHidden=0                         " 不显示隐藏文件
+let g:NERDTreeShowHidden=1                      " 显示隐藏文件、目录 
 "let NERDTreeHighlightCursorline=0               " 不高亮显示光标所在的文件
 "map <C-f> :NERDTreeToggle<CR>                  " 开启/关闭nerdtree快捷键
 
@@ -263,17 +279,17 @@ nmap <Leader>tb :TagbarToggle<CR>               " 快捷键设置
 "let g:persistentBehaviour = 0                  " 所有文件关闭，只剩资源管理窗口时，退出vim
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ale配置
+" ale配置，乱码，设置终端软件(xshell)及vim/linux配置合适的编码、字体解决
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"let g:ale_sign_column_always = 1				"始终开启标志列
-"let g:ale_set_highlights = 0
-"let g:ale_sign_error = '✗'						"自定义error和warning图标
-"let g:ale_sign_warning = '⚡'
+let g:ale_sign_column_always = 1				"始终开启标志列
+let g:ale_set_highlights = 0
+let g:ale_sign_error = '✗'						"自定义error和warning图标
+let g:ale_sign_warning = '⚡'
 "
-"let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']	"在vim自带的状态栏中整合ale	
+let g:ale_statusline_format = ['✗ %d', '⚡ %d', '✔ OK']	"在vim自带的状态栏中整合ale	
 "let g:ale_echo_msg_error_str = 'E'						"显示Linter名称,出错或警告等相关信息
 "let g:ale_echo_msg_warning_str = 'W'
-"let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 "
 "nmap sp <Plug>(ale_previous_wrap)				"普通模式下，sp前往上一个错误或警告，sn前往下一个错误或警告
 "nmap sn <Plug>(ale_next_wrap)
@@ -314,6 +330,15 @@ hi! SpellCap gui=undercurl guisp=blue
 hi! SpellRare gui=undercurl guisp=magenta
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-which-key配置 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:mapleader = "\<Space>"
+let g:maplocalleader = ","
+
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :WhichKey ','<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 通用配置2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 需要在nerdtree窗口打开后执行，否则无法跳转到打开文件窗口
@@ -328,7 +353,3 @@ autocmd FileType tagbar setlocal nocursorline nocursorcolumn
 "language messages zh_CN.UTF-8 "解决输出乱码 
 source $VIMRUNTIME/delmenu.vim "解决菜单乱码
 source $VIMRUNTIME/menu.vim "解决consle输出乱码 
-
-set fileencodings=utf-8,gbk,utf-16le,cp1252,iso-8859-15,ucs-bom
-set termencoding=utf-8
-set encoding=utf-8
