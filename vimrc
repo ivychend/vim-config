@@ -21,6 +21,7 @@ Plug 'w0rp/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-surround'
 Plug 'liuchengxu/vim-which-key'
+"Plug 'yszou/vimim-wubi'                         " vim内置五笔输入法
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -28,10 +29,12 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 通用配置 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:mapleader = "\<Space>"        " leader默认为\, 可以修改为, 现为空格
+let g:mapleader = "\<Space>"                    " leader默认为\, 可以修改为, 现为空格
 
 " 通用按键映射
-nnoremap <silent> yaf [m{jV]m%y     " 复制整个函数，适用于Java, PHP等
+nnoremap <silent> yaf [m{jV]m%y                 " 复制整个函数，适用于Java, PHP等
+nnoremap <silent> <tab> :bnext<CR>              " 设置切换buffer快捷键为tab，shift + tab
+nnoremap <silent> <s-tab> :bprevious<CR> 
 
 
 set nocompatible                                " 不兼容vi
@@ -58,14 +61,19 @@ set autoindent                                  " 自动缩进，与set paste冲
 "set paste                                       " vim粘贴外部内容时，autoindent会修改缩进，此时需要使用
 set smartindent                                 " 智能缩进
 
-" 编码
+" 编码、格式
 set encoding=utf-8                              " utf-8编码,缓冲的文本(你正在编辑的文件)，寄存器，Vim 脚本文件
 "set termencoding=utf-8                          " 输出到客户终端（Term）采用的编码类型，默认为空，就是不进行编码转换
 set fileencoding=utf-8                          " vim写入文件时采用的编码类型
+"set fileformats=unix,dos                        " vim可以显示的格式，默认是unix、dos，添加dos后^M将不会显示
+set fileformats=unix                            " dos格式文件会显示^M
+set fileformat=unix                             
 
 " 光标、鼠标
 "set ruler                                       " 高亮当前行
 set cursorcolumn cursorline                     " 高亮当前列/行
+set mouse=a                                     " 所有模式下鼠标生效
+"set mouse-=a                                   " 关闭鼠标，鼠标可以配置在指定模式下生效或者多种模式生效
 
 " 搜索
 set incsearch                                   " 实时搜索，根据当前输入字符串实时匹配
@@ -265,8 +273,8 @@ set updatetime=2000                             " tagbar刷新时间间隔
 " 打开vim时自动打开，默认不打开，默认打开会导致tagbar加载很慢，有时显示不出来，
 " 需要使用时再打开，使用ctrl + w + w切换到tagbar窗口再切换出来，tagbar可以立刻
 " 刷新
-"autocmd VimEnter * nested :call tagbar#autoopen(1)  " 打开tagbar支持的文件类型时打开tagbar窗口
-autocmd VimEnter * nested :TagbarOpen              " 只要打开vim就打开tagbar窗口
+autocmd VimEnter * nested :call tagbar#autoopen(1)  " 打开tagbar支持的文件类型时打开tagbar窗口
+"autocmd VimEnter * nested :TagbarOpen              " 只要打开vim就打开tagbar窗口
 nmap <Leader>tb :TagbarToggle<CR>               " 快捷键设置 
 "map <F3> :Tagbar<CR>
 
@@ -342,12 +350,13 @@ nnoremap <silent> <localleader> :WhichKey ','<CR>
 " 通用配置2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 需要在nerdtree窗口打开后执行，否则无法跳转到打开文件窗口
-autocmd vimenter * wincmd w                     " 相当执行一次ctrl + w + w，跳转到下一个窗口
-autocmd vimenter * wincmd w                     " 前面打开了nerdtree/tagbar，所以需要两次跳转到buffer
+"autocmd vimenter * wincmd w                     " 相当执行一次ctrl + w + w，跳转到下一个窗口
+"autocmd vimenter * wincmd w                     " 前面打开了nerdtree/tagbar，所以需要两次跳转到buffer
+autocmd VimEnter * wincmd p                     " 打开新的buffer时自动定位到编辑窗口
 set autochdir                                   " nerdtree自动切换到当前buffer文件所在目录
 " nerdtree tagbar窗口行、列不高亮
 autocmd FileType nerdtree setlocal nocursorcolumn
-autocmd FileType tagbar setlocal nocursorline nocursorcolumn
+autocmd FileType tagbar setlocal nocursorcolumn
 
 "set termencoding=cp936                         " 解决tagbar窗口边符号乱码，但是中文乱码，不能用，使用tagbar_iconchars后解决
 "language messages zh_CN.UTF-8 "解决输出乱码 
