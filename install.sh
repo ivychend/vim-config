@@ -35,7 +35,9 @@ make && make install                        # need sudo or root by default, caus
 # use vim-plug install ludovicchabant/vim-gutentags skywind3000/gutentags_plus so that we do not need to copy *.vim anymore
 #cp gtags-cscope.vim,gtags.vim $VIM_DIR/plugin/
 
+sudo apt-get install autoconf
 # install universal ctags
+cd $EX_DOWNLOAD
 git clone https://github.com/universal-ctags/ctags.git
 cd ctags
 ./autogen.sh                                # depend on autoconf, must install before
