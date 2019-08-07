@@ -72,7 +72,7 @@ set fileformat=unix
 " 光标、鼠标
 "set ruler                                       " 高亮当前行
 set cursorcolumn cursorline                     " 高亮当前列/行
-set mouse=a                                     " 所有模式下鼠标生效
+"set mouse=a                                     " 所有模式下鼠标生效
 "set mouse-=a                                   " 关闭鼠标，鼠标可以配置在指定模式下生效或者多种模式生效
 
 " 搜索
@@ -315,6 +315,7 @@ let g:ale_linters = {
 \   'c++': ['clang'],
 \   'c': ['clang', 'gcc'],
 \   'python': ['pylint'],
+\   'sh': ['shellcheck'],
 \}
 let g:ale_linters_explicit = 1
 let g:ale_completion_delay = 500
