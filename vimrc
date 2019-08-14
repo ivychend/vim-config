@@ -22,6 +22,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-surround'
 Plug 'liuchengxu/vim-which-key'
 "Plug 'yszou/vimim-wubi'                         " vim内置五笔输入法
+Plug 'rbgrouleff/bclose.vim'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -35,7 +36,7 @@ let g:mapleader = "\<Space>"                    " leader默认为\, 可以修改
 nnoremap <silent> yaf [m{jV]m%y                 " 复制整个函数，适用于Java, PHP等
 nnoremap <silent> <tab> :bnext<CR>              " 设置切换buffer快捷键为tab，shift + tab
 nnoremap <silent> <s-tab> :bprevious<CR> 
-
+inoremap <silent> jk <ESC>
 
 set nocompatible                                " 不兼容vi
 set noswapfile                                  " 不生成.swp文件
@@ -85,6 +86,7 @@ set fillchars=vert:\                            " 窗口分隔默认为"|"，修
 "highlight VertSplit ctermbg=100 ctermfg=100     " 设置窗口分隔符颜色
 "hi VertSplit ctermfg=244 ctermbg=232 cterm=bold
 highlight VertSplit term=reverse ctermbg=242 guibg=Grey40   " 灰色
+set wildmenu                                    " vim命令模式时，tab补全，列出补全候选
 
 " 自动化
 let autosave=60                                 " 60s自动保存
