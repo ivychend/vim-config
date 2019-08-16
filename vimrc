@@ -23,6 +23,7 @@ Plug 'tpope/vim-surround'
 Plug 'liuchengxu/vim-which-key'
 "Plug 'yszou/vimim-wubi'                         " vim内置五笔输入法
 Plug 'rbgrouleff/bclose.vim'
+"Plug 'Shougo/deol.nvim'                         " vim终端，vim8.0以上自带终端
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -288,6 +289,13 @@ nmap <Leader>tb :TagbarToggle<CR>               " 快捷键设置
 "let g:AutoOpenWinManager = 1                   " 在进入vim时自动打开winmanager      
 "let g:persistentBehaviour = 0                  " 所有文件关闭，只剩资源管理窗口时，退出vim
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" LeaderF 配置
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 添加LeaderF root标记
+let g:Lf_RootMarkers = ['kernel', '.git', '.svn', '.project']
+" LeaderF工作目录(作用范围)模式，c: 表示当前目录，A：表示root目录，如果不存在root就是c模式
+let g:Lf_WorkingDirectoryMode = 'Ac'
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ale配置，乱码，设置终端软件(xshell)及vim/linux配置合适的编码、字体解决
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
