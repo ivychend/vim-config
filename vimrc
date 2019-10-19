@@ -35,6 +35,7 @@ let g:mapleader = "\<Space>"                    " leader默认为\, 可以修改
 
 " 通用按键映射
 nnoremap <silent> yaf [m{jV]m%y                 " 复制整个函数，适用于Java, PHP等
+nnoremap <silent> daf [m{jV]m%d                 " 剪切整个函数，适用于Java, PHP等
 nnoremap <silent> <tab> :bnext<CR>              " 设置切换buffer快捷键为tab，shift + tab
 nnoremap <silent> <s-tab> :bprevious<CR> 
 inoremap <silent> jk <ESC>
@@ -56,20 +57,20 @@ autocmd InsertLeave * :set relativenumber       " 普通模式下加上相对行
 " 缩进、tab、换行、paste
 set tabstop=4	                                " 一个tab四个空格字符
 set softtabstop=4                               " 编辑模式的时按退格退回缩进的长度
-set expandtab	                                " 用空格来替换tab
+"set expandtab	                                " 用空格来替换tab，导致文件缩进混乱，不再建议使用
 set shiftwidth=4                                " 每一级缩进的长度
 set textwidth=150                               " 设置150自动换行,150已经接近nerdtree窗口了
 set autoindent                                  " 自动缩进，与set paste冲突，不能共存
-"set paste                                       " vim粘贴外部内容时，autoindent会修改缩进，此时需要使用
+"set paste                                       " vim粘贴外部内容时，autoindent会修改缩进，此时需要使用，paste模式时无自动补全
 set smartindent                                 " 智能缩进
 
 " 编码、格式
 set encoding=utf-8                              " utf-8编码,缓冲的文本(你正在编辑的文件)，寄存器，Vim 脚本文件
 "set termencoding=utf-8                          " 输出到客户终端（Term）采用的编码类型，默认为空，就是不进行编码转换
 set fileencoding=utf-8                          " vim写入文件时采用的编码类型
-"set fileformats=unix,dos                        " vim可以显示的格式，默认是unix、dos，添加dos后^M将不会显示
-set fileformats=unix                            " dos格式文件会显示^M
-set fileformat=unix                             
+set fileformats=unix,dos                        " vim可以显示的格式，默认是unix、dos，添加dos后^M将不会显示
+"set fileformats=unix                            " dos格式文件会显示^M
+"set fileformat=unix                             
 
 " 光标、鼠标
 "set ruler                                       " 高亮当前行
@@ -79,7 +80,15 @@ set cursorcolumn cursorline                     " 高亮当前列/行
 
 " 搜索
 set incsearch                                   " 实时搜索，根据当前输入字符串实时匹配
-set hlsearch                                    " 高亮搜索结果，输入:nohlsearch(noh)取消，也可以:set nohlsearch
+"set hlsearch                                    " 高亮搜索结果，输入:nohlsearch(noh)取消，也可以:set nohlsearch
+autocmd cursorhold * set nohlsearch				" 当光标一段时间保持不动了，就禁用高亮
+" 当输入查找命令时，再启用高亮
+noremap n :set hlsearch<cr>n
+noremap N :set hlsearch<cr>N
+noremap / :set hlsearch<cr>/
+noremap ? :set hlsearch<cr>?
+noremap * :set hlsearch<cr>*
+noremap # :set hlsearch<cr>#
 
 " UI
 set laststatus=2                                "永远显示状态栏
@@ -88,6 +97,7 @@ set fillchars=vert:\                            " 窗口分隔默认为"|"，修
 "hi VertSplit ctermfg=244 ctermbg=232 cterm=bold
 highlight VertSplit term=reverse ctermbg=242 guibg=Grey40   " 灰色
 set wildmenu                                    " vim命令模式时，tab补全，列出补全候选
+"set wildmode=list:longest,full					" 输入部分字符后，第一个tab会列出所有匹配，后面的tab会遍历所有匹配项
 
 " 自动化
 let autosave=60                                 " 60s自动保存
@@ -251,6 +261,9 @@ let g:NERDTreeShowHidden=1                      " 显示隐藏文件、目录
 "let NERDTreeHighlightCursorline=0               " 不高亮显示光标所在的文件
 "map <C-f> :NERDTreeToggle<CR>                  " 开启/关闭nerdtree快捷键
 
+let g:NERDTreeNodeDelimiter = "\u00a0"			" 解决nerdtree显示异常问题
+" nerdtree自动更新目录，会导致显示layout异常，所以不使用 
+"autocmd BufEnter * if &modifiable | NERDTreeFind | wincmd p | endif
 autocmd vimenter * NERDTree                     " 自动开启Nerdtree
 autocmd vimenter * if !argc()|NERDTree|endif    " 打开vim时如果没有文件自动打开NERDTree
 "当NERDTree为剩下的唯一窗口时自动关闭
@@ -355,7 +368,7 @@ let g:mapleader = "\<Space>"
 let g:maplocalleader = ","
 
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :WhichKey ','<CR>
+"nnoremap <silent> <localleader> :WhichKey ','<CR>  " 占用了<,>，,需要给t/f使用
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " 通用配置2
@@ -368,6 +381,21 @@ set autochdir                                   " nerdtree自动切换到当前b
 " nerdtree tagbar窗口行、列不高亮
 autocmd FileType nerdtree setlocal nocursorcolumn
 autocmd FileType tagbar setlocal nocursorcolumn
+
+" returns true iff is NERDTree open/active
+function! s:isNTOpen()        
+  return exists("t:NERDTreeBufName") && (bufwinnr(t:NERDTreeBufName) != -1)
+endfunction
+
+" calls NERDTreeFind iff NERDTree is active, current window contains a modifiable file, and we're not in vimdiff
+function! s:syncTree()
+  if &modifiable && s:isNTOpen() && strlen(expand('%')) > 0 && !&diff
+    NERDTreeFind
+    wincmd p
+  endif
+endfunction
+" nerdtree自动更新目录，会导致显示layout异常，所以不使用
+"autocmd BufEnter * call s:syncTree()
 
 "set termencoding=cp936                         " 解决tagbar窗口边符号乱码，但是中文乱码，不能用，使用tagbar_iconchars后解决
 "language messages zh_CN.UTF-8 "解决输出乱码 
