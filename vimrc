@@ -39,6 +39,22 @@ nnoremap <silent> daf [m{jV]m%d                 " 剪切整个函数，适用于
 nnoremap <silent> <tab> :bnext<CR>              " 设置切换buffer快捷键为tab，shift + tab
 nnoremap <silent> <s-tab> :bprevious<CR> 
 inoremap <silent> jk <ESC>
+func NoLineNum()
+	set nonumber
+	set norelativenumber
+endfunc
+nnoremap <silent> cm <c-w>o:call NoLineNum()<CR>" copy mode
+"nnoremap <silent> cm <c-w>o:set nonumber|:set norelativenumber<CR>" copy mode
+
+func NormalMode()
+	set number
+	set relativenumber
+	exe "NERDTreeToggle"
+	exe "TagbarToggle"
+	exe "wincmd p"
+endfunc
+"nnoremap <silent> nm :call NormalMode()|:call NERDTreeToggle()|:calDTreeTogglegle()<CR>			" normal mode
+nnoremap <silent> nm :call NormalMode()<CR>			" normal mode
 
 set nocompatible                                " 不兼容vi
 set noswapfile                                  " 不生成.swp文件
